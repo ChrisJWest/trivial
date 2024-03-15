@@ -26,27 +26,28 @@ document.addEventListener('DOMContentLoaded', function() {
 //    return shuffled.slice(0, count);
 //}
 
-function seedBasedOnDate() {
-    const today = new Date();
-    const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-    return seed;
-}
 
-function pseudoRandom(seed) {
-    return () => {
-        const x = Math.sin(seed++) * 10000;
-        return x - Math.floor(x);
-    };
+function generateSeedFromDate() {
+    const now = new Date();
+    return now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
 }
-
 
 function selectRandomQuestions(data, count) {
-    const seed = seedBasedOnDate();
-    const random = pseudoRandom(seed);
+    const seed = generateSeedFromDate();
+    let pseudoRandom = (() => {
+        let localSeed = seed;
+        return () => {
+            localSeed = (localSeed * 9301 + 49297) % 233280; // Example LCG parameters
+            return localSeed / 233280;
+        };
+    })();
     
-    // Custom shuffle function using the pseudo-random generator
-    const shuffled = data.sort(() => 0.5 - random());
-    return shuffled.slice(0, count);
+    const shuffled = data.map((value, index) => ({ value, sort: pseudoRandom() }))
+                         .sort((a, b) => a.sort - b.sort)
+                         .map(({ value }) => value)
+                         .slice(0, count);
+
+    return shuffled;
 }
 
 
