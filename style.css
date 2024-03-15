@@ -20,3 +20,26 @@ body {
 #score {
     margin-top: 20px;
 }
+
+#legend {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Creates 4 equal columns */
+    gap: 10px; /* Space between grid items */
+    padding: 10px; /* Padding around the legend area */
+    align-items: start; /* Aligns items to the start vertically */
+}
+
+.legend-item {
+    display: flex;
+    align-items: center; /* Center items vertically */
+    justify-content: start; /* Align items to the start (left-aligned) */
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin-right: 10px; /* Space between the color box and text */
+    border: 1px solid #000; /* Optional: adds a border around the color box */
+}
+
